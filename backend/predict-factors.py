@@ -1,7 +1,7 @@
 import csv
 import numpy as np
 
-OLD_DICT_KEYS = ["Gender", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"]
+OLD_KEYS = ["Gender", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"]
 KEYS = ["Female", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"]
 
 def get_median_income(data):
@@ -30,7 +30,7 @@ def delete_irrelevant_variables(data):
     """
     for i in range(len(data)):
         row = data[i]
-        data[i] = {k: row[k] for k in OLD_DICT_KEYS}
+        data[i] = {k: row[k] for k in OLD_KEYS}
     
     return data
 
@@ -44,17 +44,16 @@ def convert_data_to_boolean(data, median_income, median_satisfaction):
         newRow = {}
 
         for x_val in row:
-            match x_val:
-                case "Gender":
-                    newRow["Female"] = 1 if row[x_val] == "Female" else 0
-                case "OverTime":
-                    newRow["OverTime"] = 1 if row[x_val] == "Yes" else 0
-                case "JobSatisfaction":
-                    newRow["JobSatisfaction"] = 1 if int(row[x_val]) >= median_satisfaction else 0
-                case "MonthlyIncome":
-                    newRow["MonthlyIncome"] = 1 if int(row[x_val]) >= median_income else 0
-                case "Attrition":
-                    newRow["Attrition"] = 1 if row[x_val] == "Yes" else 0
+            if x_val == OLD_KEYS[0]:        # Gender case
+                newRow[KEYS[0]] = 1 if row[x_val] == "Female" else 0
+            elif x_val == OLD_KEYS[1]:      # OverTime case
+                newRow[KEYS[1]] = 1 if row[x_val] == "Yes" else 0
+            elif x_val == OLD_KEYS[2]:      # JobSatisfaction case
+                newRow[KEYS[2]] = 1 if int(row[x_val]) >= median_satisfaction else 0
+            elif x_val == OLD_KEYS[3]:      # MonthlyIncome case
+                newRow[KEYS[3]] = 1 if int(row[x_val]) >= median_income else 0
+            else:                           # Attrition case
+                newRow[KEYS[4]] = 1 if row[x_val] == "Yes" else 0
         
         booleanData.append(newRow)
     
@@ -153,15 +152,15 @@ def get_prob_y_given_x(x_row, y, all_p_x_given_y, p_y):
     return joint_prob(x_row, y, all_p_x_given_y, p_y)
 
 def get_user_x_vals(x_val):
-    if x_val == "Female":
+    if x_val == KEYS[0]:        # Female case
         return int(input("Enter 1 or 0 for female. "))
-    elif x_val == "OverTime":
+    elif x_val == KEYS[1]:      # OverTime case
         return int(input("Enter 1 or 0 for overtime. "))
-    elif x_val == "JobSatisfaction":
+    elif x_val == KEYS[2]:      # JobSatisfaction case
         return int(input("Enter 1 or 0 for job satisfaction. "))
-    elif x_val == "MonthlyIncome":
+    elif x_val == KEYS[3]:      # MonthlyIncome case
         return int(input("Enter 1 or 0 for monthly income. "))
-    else:
+    else:                       # Attrition case
         return int(input("Enter 1 or 0 for attrition. "))
 
 def get_user_y_val():
