@@ -176,18 +176,6 @@ def predict_attrition(all_p_x_given_y, p_y, data, y_column):
 
     # find and return P(x|y=1)P(y=1)
     return get_prob_y_given_x(user_row, 1, all_p_x_given_y, p_y)       
-
-def send_to_html(p):
-    # Read the HTML template
-    with open("frontend/unbiased.html", "r") as file:
-        html_content = file.read()
-
-    # Replace the placeholder with the probability value
-    html_content = html_content.format(probability=str(p))
-
-    # Save the modified HTML content to a new file
-    with open("frontend/unbiased.html", "r") as file:
-        file.write(html_content)
         
 def main():
     # load the training set
@@ -203,7 +191,6 @@ def main():
     # get attrition prediction
     p_attrition = predict_attrition(all_p_x_given_y, p_y, training, y_column)
     print(f"P(Attrition) =  {p_attrition}")
-    send_to_html(p_attrition)
     
 if __name__ == "__main__":
     main()

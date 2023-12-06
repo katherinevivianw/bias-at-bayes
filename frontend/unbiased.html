@@ -2,7 +2,6 @@
 <html>
     <head>
         <title> Keeping Bias at Bay(es) </title>
-        <link rel="icon" type="image/png" href="images/favicon.png"/>
         <link rel="stylesheet" href="style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,47 +48,49 @@
                 
                     <h2>What do you want to predict?</h2>
                     <form id="questionForm">
-                        <div class="form-group">
+                        <div class="form-group" id="y_val">
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="option1" name="answer" class="custom-control-input" value="Paris" required>
+                                <input type="radio" id="option1" name="answer" class="custom-control-input" value="Female" required>
                                 <label class="custom-control-label" for="option1">Female</label>
                             </div>
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="option2" name="answer" class="custom-control-input" value="London" required>
+                                <input type="radio" id="option2" name="answer" class="custom-control-input" value="OverTime" required>
                                 <label class="custom-control-label" for="option2">Overtime Work</label>
                             </div>
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="option3" name="answer" class="custom-control-input" value="Berlin" required>
+                                <input type="radio" id="option3" name="answer" class="custom-control-input" value="JobSatisfaction" required>
                                 <label class="custom-control-label" for="option3">Job Satisfaction</label>
                             </div>
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="option4" name="answer" class="custom-control-input" value="Rome" required>
+                                <input type="radio" id="option4" name="answer" class="custom-control-input" value="MonthlyIncome" required>
                                 <label class="custom-control-label" for="option4">Monthly Income</label>
                             </div>
                             <div class="custom-control custom-radio">
-                                <input type="radio" id="option4" name="answer" class="custom-control-input" value="Rome" required>
+                                <input type="radio" id="option4" name="answer" class="custom-control-input" value="Attrition" required>
                                 <label class="custom-control-label" for="option4">Attrition</label>
                             </div>
                         </div>
                     </form>
 
                     <h2>Check off the factors that you want to be true:</h2>
-                    <input type="checkbox" id="female" name="female" value="Female">
+                    <input type="checkbox" id="female" name="Female" value="Female">
                     <label for="female">Female</label><br>
-                    <input type="checkbox" id="overtime" name="overtime" value="OverTime">
-                    <label for="overtime">Monthly Income</label><br>
-                    <input type="checkbox" id="job-safistaction" name="job-satisfaction" value="JobSatisfaction">
+                    <input type="checkbox" id="overtime" name="OverTime" value="OverTime">
+                    <label for="overtime">Overtime</label><br>
+                    <input type="checkbox" id="job-safistaction" name="JobSatisfaction" value="JobSatisfaction">
                     <label for="job-satisfaction">Job Satisfaction</label><br>
-                    <input type="checkbox" id="income" name="income" value="MonthlyIncome">
+                    <input type="checkbox" id="income" name="MonthlyIncome" value="MonthlyIncome">
                     <label for="income">Monthly Income</label><br>
 
-                    <button type="submit" class="button-solid">Submit Inputs</button>
+                    <button type="button" id="submitButton" class="button-solid">Submit Inputs</button>
             
             </div>
         </section>
 
         <div class="probability-result">
-            <h2>Result: {probability}</h2>
+            <h2 id="probability-result">Result: {probability}</h2>
         </div>
 
+        <script src="predictFactors.js"></script>
     </body>
+</html>

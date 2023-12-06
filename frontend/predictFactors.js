@@ -1,9 +1,6 @@
-const fs = require('fs');
-const readlineSync = require('readline-sync'); // for user input
-
 const OLD_KEYS = ["Gender", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"];
 const KEYS = ["Female", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"];
-const DATASET_FILE = "backend/employee-data.csv";
+const DATASET_FILE = "employee-data.csv";
 
 function getMedianFactor(data, factor) {
     const factors = data.map(row => parseInt(row[factor]));
@@ -42,26 +39,36 @@ function median(arr) {
     return sortedArr.length % 2 !== 0 ? sortedArr[mid] : (sortedArr[mid - 1] + sortedArr[mid]) / 2;
 }
 
-function load(filename) {
-    const fileContent = fs.readFileSync(filename, 'utf-8');
-    const csvRows = fileContent.split('\n');
-    const headers = csvRows[0].split(',');
-    const data = csvRows.slice(1).map(row => {
-        const values = row.split(',');
-        return Object.fromEntries(headers.map((header, index) => [header, values[index]]));
-    });
+async function load(filename) {
+    try {
+        const response = await fetch(filename);
+        if (!response.ok) {
+            throw new Error(`Failed to load ${filename}: ${response.status} ${response.statusText}`);
+        }
 
-    // delete variables that we are not considering
-    const newData = deleteIrrelevantVariables(data);
+        const fileContent = await response.text();
+        const csvRows = fileContent.split('\n');
+        const headers = csvRows[0].split(',');
+        const data = csvRows.slice(1).map(row => {
+            const values = row.split(',');
+            return Object.fromEntries(headers.map((header, index) => [header, values[index]]));
+        });
 
-    // get median monthly income and satisfaction
-    const medianSatisfaction = getMedianFactor(newData, KEYS[2]);
-    const medianIncome = getMedianFactor(newData, KEYS[3]);
+        // delete variables that we are not considering
+        const newData = deleteIrrelevantVariables(data);
 
-    // convert all values to integer boolean values
-    const booleanData = convertDataToBoolean(newData, medianIncome, medianSatisfaction);
+        // get median monthly income and satisfaction
+        const medianSatisfaction = getMedianFactor(newData, KEYS[2]);
+        const medianIncome = getMedianFactor(newData, KEYS[3]);
 
-    return booleanData;
+        // convert all values to integer boolean values
+        const booleanData = convertDataToBoolean(newData, medianIncome, medianSatisfaction);
+
+        return booleanData;
+    } catch (error) {
+        console.error(error);
+        // Handle the error as needed
+    }
 }
 
 function getPXGivenY(xColumn, yColumn, data) {
@@ -82,12 +89,12 @@ function getPXGivenY(xColumn, yColumn, data) {
         }
     }
 
-    return [(xOneYZero + 1) / (yZero + 2), (xOneYOne + 1) / (yOne + 2)];
+    return [(xOneYZero + 1) / (yZero + 2), (xOneYOne + 1) / (yOne + 2)];    // include laplace smoothing
 }
 
 function getAllPXGivenY(yColumn, data) {
     const allPXGivenY = {};
-
+    
     for (const xVal in data[0]) {
         if (xVal !== yColumn) {
             allPXGivenY[xVal] = getPXGivenY(xVal, yColumn, data);
@@ -144,39 +151,58 @@ function getUserXVals(xVal) {
 }
 
 function getUserYVal() {
-    return readlineSync.question("What do you want to predict? (Female, OverTime, JobSatisfaction, MonthlyIncome, Attrition) ");
+    const selectedRadioButton = document.querySelector('input[name="answer"]:checked');
+    return selectedRadioButton ? selectedRadioButton.value : null;
+}
+
+function getUserXVals() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const userInputs = {};
+
+    checkboxes.forEach((checkbox) => {
+        userInputs[checkbox.name] = 1; // Set the value to 1 for checked checkboxes
+    });
+
+    return userInputs;
 }
 
 function getUserInputs(yColumn) {
-    const userRow = {};
-    KEYS.filter(key => key !== yColumn).forEach(key => {
-        userRow[key] = getUserXVals(key);
-    });
+    const userRow = getUserXVals();
+    //userRow[yColumn] = 1; // Set the value to 1 for the selected radio button
 
     return userRow;
 }
 
 function predictAttrition(allPXGivenY, pY, data, yColumn) {
     const userRow = getUserInputs(yColumn);
-    return getProbYGivenX(userRow, 1, allPXGivenY, pY);
+    console.log(userRow);
+    const pAttrition = getProbYGivenX(userRow, 1, allPXGivenY, pY);
+
+    // Update the content of the HTML element with the id 'probability-result'
+    document.getElementById('probability-result').textContent = `Result: ${pAttrition}`;
+
+    return pAttrition;
 }
 
-function main() {
-    // load the training set
-    const training = load(DATASET_FILE);
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('submitButton').addEventListener('click', async function () {
+        try {
+            // load the training set
+            const training = await load(DATASET_FILE);
 
-    // compute model parameters (i.e. P(Y), P(X_i|Y))
-    const yColumn = getUserYVal();
-    const allPXGivenY = getAllPXGivenY(yColumn, training);
-    console.log(`P(X_i | Y) = ${JSON.stringify(allPXGivenY)}`);
-    const pY = getPY(yColumn, training);
-    console.log(`P(Y) = ${pY}`);
+            // compute model parameters (i.e. P(Y), P(X_i|Y))
+            const yColumn = getUserYVal();
+            const allPXGivenY = getAllPXGivenY(yColumn, training);
+            console.log(`P(X_i | Y) = ${JSON.stringify(allPXGivenY)}`);
+            const pY = getPY(yColumn, training);
+            console.log(`P(Y) = ${pY}`);
 
-    // get attrition prediction
-    const pAttrition = predictAttrition(allPXGivenY, pY, training, yColumn);
-    console.log(`P(Attrition) = ${pAttrition}`);
-}
-
-if (require.main === module) {
-    main();
-}
+            // get attrition prediction
+            const pAttrition = predictAttrition(allPXGivenY, pY, training, yColumn);
+            console.log(`P(Attrition) = ${pAttrition}`);
+        } catch (error) {
+            console.error(error);
+        }
+        
+    });
+});
