@@ -155,7 +155,7 @@ function getUserYVal() {
     return selectedRadioButton ? selectedRadioButton.value : null;
 }
 
-function getUserXVals() {
+function getUserXVals(yColumn) {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
     const userInputs = {};
 
@@ -163,11 +163,18 @@ function getUserXVals() {
         userInputs[checkbox.name] = 1; // Set the value to 1 for checked checkboxes
     });
 
+    KEYS.forEach(function(xVal) {
+        if (!(xVal in userInputs)){
+            userInputs[xVal] = 0;   // Set x_vals that were not checked off to 0
+        }
+    });
+    delete userInputs[yColumn];     // Delete y value we're predicting from the x value dict
+
     return userInputs;
 }
 
 function getUserInputs(yColumn) {
-    const userRow = getUserXVals();
+    const userRow = getUserXVals(yColumn);
     //userRow[yColumn] = 1; // Set the value to 1 for the selected radio button
 
     return userRow;
@@ -192,6 +199,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // compute model parameters (i.e. P(Y), P(X_i|Y))
             const yColumn = getUserYVal();
+            console.log(yColumn);
+            if (yColumn === null) {
+                throw("Need to input a Y value.");
+            }
             const allPXGivenY = getAllPXGivenY(yColumn, training);
             console.log(`P(X_i | Y) = ${JSON.stringify(allPXGivenY)}`);
             const pY = getPY(yColumn, training);
@@ -204,5 +215,28 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error(error);
         }
         
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Add event listener to the radio buttons for immediate response
+    const radioButtons = document.querySelectorAll('input[type="radio"][name="answer"]');
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const checkboxLabels = document.querySelectorAll('input[type="checkbox"] + label'); // Select labels associated with checkboxes
+
+    radioButtons.forEach(radioButton => {
+        radioButton.addEventListener('change', function () {
+            // Set visibility for corresponding checkbox and label based on selected radio button value
+            const selectedValue = this.value;
+            checkboxes.forEach((checkbox, index) => {
+                if (checkbox.name === selectedValue) {
+                    checkbox.style.visibility = 'hidden'; // Make the checkbox invisible
+                    checkboxLabels[index].style.visibility = 'hidden'; // Make the label next to the checkbox invisible
+                } else {
+                    checkbox.style.visibility = 'visible'; // Make other checkboxes visible
+                    checkboxLabels[index].style.visibility = 'visible'; // Make other labels next to checkboxes visible
+                }
+            });
+        });
     });
 });
