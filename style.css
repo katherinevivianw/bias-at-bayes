@@ -68,6 +68,7 @@ nav ul li a:hover::after{
     text-align: center;
 }
 .home-text h1{
+    font-weight: 600;
     font-size: 60px;
     font-weight: 100; 
     margin-top: 18px; 
@@ -75,12 +76,39 @@ nav ul li a:hover::after{
 }
 .home-text h2{
     font-size: 40px;
+    color: #E29492;
     font-weight: 100; 
     margin-top: 18px; 
     margin-bottom: 15px; 
 }
 .home-text p{
     font-size: 20px;
+}
+
+/* edit project description */
+#descriptionBox{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    background-color: #f7f7f7;
+    width: 800px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+.proj-desc{
+    margin: 10px auto;
+}
+.sub-title{
+    font-size: 35px;
+    font-weight: 600;
+    color: #000000;
+    text-align: center;
+}
+.about-description{
+    font-size: 14px;
+    text-align: left;
 }
 
 /************** UNBIASED **************/
