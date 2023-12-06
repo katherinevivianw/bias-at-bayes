@@ -3,7 +3,7 @@ import numpy as np
 
 OLD_KEYS = ["Gender", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"]
 KEYS = ["Female", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"]
-DATASET_FILE = "employee-data.csv"
+DATASET_FILE = "employee-data-unbiased.csv"
 
 def get_median_factor(data, factor):
     """

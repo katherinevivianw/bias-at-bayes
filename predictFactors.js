@@ -1,6 +1,6 @@
 const OLD_KEYS = ["Gender", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"];
 const KEYS = ["Female", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"];
-const DATASET_FILE = "employee-data.csv";
+//const DATASET_FILE = "employee-data-unbiased.csv";
 
 function getMedianFactor(data, factor) {
     const factors = data.map(row => parseInt(row[factor]));
@@ -194,8 +194,12 @@ function predictAttrition(allPXGivenY, pY, data, yColumn) {
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('submitButton').addEventListener('click', async function () {
         try {
+            // get the filename based on the HTML
+            const filename = document.location.pathname.includes('unbiased') ? 'employee-data-unbiased.csv' : 'employee-data-biased.csv';
+            console.log(filename);
+
             // load the training set
-            const training = await load(DATASET_FILE);
+            const training = await load(filename);
 
             // compute model parameters (i.e. P(Y), P(X_i|Y))
             const yColumn = getUserYVal();
