@@ -4,25 +4,15 @@ import numpy as np
 OLD_KEYS = ["Gender", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"]
 KEYS = ["Female", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"]
 
-def get_median_income(data):
+def get_median_factor(data, factor):
     """
-    Computes the median monthly income in the dataset.
+    Computes the median factor in the dataset.
     """
-    incomes = []
+    factors = []
     for row in data:
-        incomes.append(int(row["MonthlyIncome"]))
+        factors.append(int(row[factor]))
 
-    return np.median(incomes)
-
-def get_median_satisfaction(data):
-    """
-    Computes the median job satisfaction rating in the dataset.
-    """
-    satisfactions = []
-    for row in data:
-        satisfactions.append(int(row["JobSatisfaction"]))
-    
-    return np.median(satisfactions)
+    return np.median(factors)
 
 def delete_irrelevant_variables(data):
     """
@@ -74,8 +64,9 @@ def load(filename):
     print(data[5])
     
     # get median monthly income and satisfaction
-    median_income = get_median_income(data)
-    median_satisfaction = get_median_satisfaction(data)  
+    median_satisfaction = get_median_factor(data, KEYS[2])  
+    median_income = get_median_factor(data, KEYS[3])
+    print(median_satisfaction, median_income)
 
     # convert all values to integer boolean values
     boolean_data = convert_data_to_boolean(data, median_income, median_satisfaction)
@@ -191,7 +182,7 @@ def predict_attrition(all_p_x_given_y, p_y, data, y_column):
         
 def main():
     # load the training set
-    training = load("employee-data.csv")
+    training = load("backend/employee-data.csv")
 
     # compute model parameters (i.e. P(Y), P(X_i|Y))
     y_column = get_user_y_val()
