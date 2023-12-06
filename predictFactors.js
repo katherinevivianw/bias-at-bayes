@@ -180,15 +180,15 @@ function getUserInputs(yColumn) {
     return userRow;
 }
 
-function predictAttrition(allPXGivenY, pY, data, yColumn) {
+function predictProbability(allPXGivenY, pY, data, yColumn) {
     const userRow = getUserInputs(yColumn);
     console.log(userRow);
-    const pAttrition = getProbYGivenX(userRow, 1, allPXGivenY, pY);
+    const p = getProbYGivenX(userRow, 1, allPXGivenY, pY);
 
     // Update the content of the HTML element with the id 'probability-result'
-    document.getElementById('probability-result').textContent = `Result: ${pAttrition}`;
+    document.getElementById('probability-result').textContent = `Result: ${p}`;
 
-    return pAttrition;
+    return p;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -212,9 +212,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const pY = getPY(yColumn, training);
             console.log(`P(Y) = ${pY}`);
 
-            // get attrition prediction
-            const pAttrition = predictAttrition(allPXGivenY, pY, training, yColumn);
-            console.log(`P(Attrition) = ${pAttrition}`);
+            // get probability prediction
+            const pPrediction = predictProbability(allPXGivenY, pY, training, yColumn);
+            console.log(`P(Y Value) = ${pPrediction}`);
         } catch (error) {
             console.error(error);
         }
