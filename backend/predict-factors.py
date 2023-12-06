@@ -3,6 +3,7 @@ import numpy as np
 
 OLD_KEYS = ["Gender", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"]
 KEYS = ["Female", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"]
+DATASET_FILE = "backend/employee-data.csv"
 
 def get_median_factor(data, factor):
     """
@@ -28,7 +29,6 @@ def convert_data_to_boolean(data, median_income, median_satisfaction):
     """
     Converts all values in the data dictionary to be represented by boolean/Bernoulli values.
     """
-    print(median_income, median_satisfaction)
     booleanData = []
     for row in data:
         newRow = {}
@@ -61,16 +61,13 @@ def load(filename):
 
     # delete variables that we are not considering
     data = delete_irrelevant_variables(data)
-    print(data[5])
     
     # get median monthly income and satisfaction
     median_satisfaction = get_median_factor(data, KEYS[2])  
     median_income = get_median_factor(data, KEYS[3])
-    print(median_satisfaction, median_income)
 
     # convert all values to integer boolean values
     boolean_data = convert_data_to_boolean(data, median_income, median_satisfaction)
-    print(boolean_data[5])
         
     return boolean_data
 
@@ -182,7 +179,7 @@ def predict_attrition(all_p_x_given_y, p_y, data, y_column):
         
 def main():
     # load the training set
-    training = load("backend/employee-data.csv")
+    training = load(DATASET_FILE)
 
     # compute model parameters (i.e. P(Y), P(X_i|Y))
     y_column = get_user_y_val()
