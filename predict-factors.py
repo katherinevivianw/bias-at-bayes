@@ -160,7 +160,7 @@ def get_user_inputs(y_column):
     user inputs.
     """
     user_row = dict.fromkeys(KEYS, -1)
-    del user_row[y_column]
+    del user_row[y_column]      # remove user's chosen y column label from user_row dict 
 
     for key in user_row:
         user_row[key] = get_user_x_vals(key)
@@ -176,6 +176,18 @@ def predict_attrition(all_p_x_given_y, p_y, data, y_column):
 
     # find and return P(x|y=1)P(y=1)
     return get_prob_y_given_x(user_row, 1, all_p_x_given_y, p_y)       
+
+def send_to_html(p):
+    # Read the HTML template
+    with open("frontend/unbiased.html", "r") as file:
+        html_content = file.read()
+
+    # Replace the placeholder with the probability value
+    html_content = html_content.format(probability=str(p))
+
+    # Save the modified HTML content to a new file
+    with open("frontend/unbiased.html", "r") as file:
+        file.write(html_content)
         
 def main():
     # load the training set
@@ -184,12 +196,14 @@ def main():
     # compute model parameters (i.e. P(Y), P(X_i|Y))
     y_column = get_user_y_val()
     all_p_x_given_y = get_all_p_x_given_y(y_column, training)
-    #print(f"P(X_i | Y) =  {all_p_x_given_y}")
+    print(f"P(X_i | Y) =  {all_p_x_given_y}")
     p_y = get_p_y(y_column, training)
-    #print(f"P(Y) =  {p_y}")
+    print(f"P(Y) =  {p_y}")
 
     # get attrition prediction
-    print(f"P(Attrition) =  {predict_attrition(all_p_x_given_y, p_y, training, y_column)}")
+    p_attrition = predict_attrition(all_p_x_given_y, p_y, training, y_column)
+    print(f"P(Attrition) =  {p_attrition}")
+    send_to_html(p_attrition)
     
 if __name__ == "__main__":
     main()

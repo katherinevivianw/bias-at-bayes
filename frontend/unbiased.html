@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Keeping Bias at Bay(es) </title>
+        <link rel="icon" type="image/png" href="images/favicon.png"/>
+        <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;1,500&family=Square+Peg&display=swap" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/db208d1ff4.js" crossorigin="anonymous"></script>
+    </head>
+
+    <!--================ BODY ================-->
+    <body>
+        <!--================ HOME ================-->
+        <div id="home">
+            <div class="container">
+                <nav>
+                    <ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">About Project</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="unbiased.html">Unbiased Example</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="biased.html">Biased Example</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="generate.html">Generate Dataset</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="extra.html">Extra Info</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div> 
+
+        <!-- Unbiased Title -->
+        <div class="unbiased-text">
+            <h2>Let's train our Naive Bayes<br>model on a less-biased company.</h2>
+            <h3>Choose your inputs:</h3>
+        </div>
+
+        <!-- Question Section -->
+        <section id="question" class="qContainer">
+            <div class="row justify-content-center">
+                
+                    <h2>What do you want to predict?</h2>
+                    <form id="questionForm">
+                        <div class="form-group">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="option1" name="answer" class="custom-control-input" value="Paris" required>
+                                <label class="custom-control-label" for="option1">Female</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="option2" name="answer" class="custom-control-input" value="London" required>
+                                <label class="custom-control-label" for="option2">Overtime Work</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="option3" name="answer" class="custom-control-input" value="Berlin" required>
+                                <label class="custom-control-label" for="option3">Job Satisfaction</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="option4" name="answer" class="custom-control-input" value="Rome" required>
+                                <label class="custom-control-label" for="option4">Monthly Income</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="option4" name="answer" class="custom-control-input" value="Rome" required>
+                                <label class="custom-control-label" for="option4">Attrition</label>
+                            </div>
+                        </div>
+                    </form>
+
+                    <h2>Check off the factors that you want to be true:</h2>
+                    <input type="checkbox" id="female" name="female" value="Female">
+                    <label for="female">Female</label><br>
+                    <input type="checkbox" id="overtime" name="overtime" value="OverTime">
+                    <label for="overtime">Monthly Income</label><br>
+                    <input type="checkbox" id="job-safistaction" name="job-satisfaction" value="JobSatisfaction">
+                    <label for="job-satisfaction">Job Satisfaction</label><br>
+                    <input type="checkbox" id="income" name="income" value="MonthlyIncome">
+                    <label for="income">Monthly Income</label><br>
+
+                    <button type="submit" class="button-solid">Submit Inputs</button>
+            
+            </div>
+        </section>
+
+        <div class="probability-result">
+            <h2>Result: {probability}</h2>
+        </div>
+
+    </body>
