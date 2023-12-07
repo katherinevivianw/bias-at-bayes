@@ -196,19 +196,26 @@ function getUserRowWords(userRow) {
     }
 
     return output.slice(2);
-}
+} 
 
 function predictProbability(allPXGivenY, pY, data, yColumn) {
     const userRow = getUserInputs(yColumn);
-    console.log(userRow);
     const userRowOutput = getUserRowOutput(userRow);
     const userRowWords = getUserRowWords(userRow);
-    console.log(userRowOutput);
-    const p = getProbYGivenX(userRow, 1, allPXGivenY, pY);
+
+    // Get Probabilities
+    const pOne = getProbYGivenX(userRow, 1, allPXGivenY, pY);
+    const pZero = getProbYGivenX(userRow, 0, allPXGivenY, pY);
 
     // Update the content of the HTML element with the id 'probability-result'
     document.getElementById('probability-result-one').innerHTML = `Probability of ${yColumn} being true given <br> ${userRowWords}`;
-    document.getElementById('probability-result-two').innerHTML = `<br>= P(${yColumn}=1 | ${userRowOutput}) <br> = ${p}`;
+    document.getElementById('probability-result-two').innerHTML = `= P(${yColumn}=1 | ${userRowOutput}) <br> = ${pOne}`;
+    document.getElementById('probability-result-three').innerHTML = `Probability of ${yColumn} being false given <br> ${userRowWords}`;
+    document.getElementById('probability-result-four').innerHTML = `= P(${yColumn}=0 | ${userRowOutput}) <br> = ${pZero}`;
+
+    const yBool = (pOne > pZero ? "true" : false);
+    // Update final classification prediction
+    document.getElementById('probability-result-five').innerHTML = `Final Prediction: ${yColumn} is ${yBool}`;
 
     return p;
 }
