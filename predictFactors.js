@@ -180,13 +180,24 @@ function getUserInputs(yColumn) {
     return userRow;
 }
 
+function getUserRowOutput(userRow) {
+    let output = "";
+    for (const [key, value] of Object.entries(userRow)) {
+        output = output.concat(", " + key + "=" + value);
+    }
+
+    return output.slice(2);
+}
+
 function predictProbability(allPXGivenY, pY, data, yColumn) {
     const userRow = getUserInputs(yColumn);
     console.log(userRow);
+    const userRowOutput = getUserRowOutput(userRow);
+    console.log(userRowOutput);
     const p = getProbYGivenX(userRow, 1, allPXGivenY, pY);
 
     // Update the content of the HTML element with the id 'probability-result'
-    document.getElementById('probability-result').textContent = `Result: ${p}`;
+    document.getElementById('probability-result').innerHTML = `P(${yColumn}=1 | ${userRowOutput}) <br> = ${p}`;
 
     return p;
 }
