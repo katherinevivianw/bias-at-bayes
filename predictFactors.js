@@ -1,6 +1,5 @@
 const OLD_KEYS = ["Gender", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"];
 const KEYS = ["Female", "OverTime", "JobSatisfaction", "MonthlyIncome", "Attrition"];
-//const DATASET_FILE = "employee-data-unbiased.csv";
 
 function getMedianFactor(data, factor) {
     const factors = data.map(row => parseInt(row[factor]));
@@ -189,15 +188,27 @@ function getUserRowOutput(userRow) {
     return output.slice(2);
 }
 
+function getUserRowWords(userRow) {
+    let output = "";
+    for (const [key, value] of Object.entries(userRow)) {
+        output = output.concat(", ")
+        output = output.concat(key + " is " + (value === 1 ? "true" : "false"));
+    }
+
+    return output.slice(2);
+}
+
 function predictProbability(allPXGivenY, pY, data, yColumn) {
     const userRow = getUserInputs(yColumn);
     console.log(userRow);
     const userRowOutput = getUserRowOutput(userRow);
+    const userRowWords = getUserRowWords(userRow);
     console.log(userRowOutput);
     const p = getProbYGivenX(userRow, 1, allPXGivenY, pY);
 
     // Update the content of the HTML element with the id 'probability-result'
-    document.getElementById('probability-result').innerHTML = `P(${yColumn}=1 | ${userRowOutput}) <br> = ${p}`;
+    document.getElementById('probability-result-one').innerHTML = `Probability of ${yColumn} being true given <br> ${userRowWords}`;
+    document.getElementById('probability-result-two').innerHTML = `<br>= P(${yColumn}=1 | ${userRowOutput}) <br> = ${p}`;
 
     return p;
 }
