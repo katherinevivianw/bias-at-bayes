@@ -25,9 +25,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="biased.html">Biased Example</a>
                         </li>
-                        <!--<li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link" href="upload.html">Upload Dataset</a>
-                        </li>-->
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="extra.html">Extra Info</a>
                         </li>
@@ -38,11 +38,14 @@
 
         <!-- Unbiased Title -->
         <div class="unbiased-text">
-            <h2>POV: You are HR at a tech company suspected to be <u><b><i>relatively good</i></b></u><br> at retaining female employees versus male employees. Let's 
-                use this tool to<br>confirm/deny suspicions and figure out what factors impact retention. 
+            <h2>Upload your company's dataset:
+                <input type="file" id="fileInput" accept=".csv">
             </h2>
             <br>
-            <h2>Use the tool below to train our Naive Bayes model on the company's<br><u><b><i>(less biased)</i></b></u> HR dataset and test on various inputs.</h2>
+            <h2>Use the tool below to train our Naive Bayes model on <br>your company's HR dataset and test on various inputs.</h2>
+            <br>
+            <h3>Note: Dataset must have "Female", "OverTime", "JobSatisfaction",<br>"MonthlyIncome", and "Attrition" columns.</h3>
+            <br>
             <h3>Choose your inputs:</h3>
         </div>
 
@@ -104,5 +107,5 @@
         </div>
 
         <script src="predictFactors.js"></script>
+        
     </body>
-</html>
