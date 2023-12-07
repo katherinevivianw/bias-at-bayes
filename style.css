@@ -222,3 +222,13 @@ embed {
     margin-right: auto;
     border-radius: 15px;
 }
+
+/************** FOOTER **************/
+.footer{
+    width: 100%;
+    color: #a1a6b4;
+    font-weight: 300;
+    text-align: center;
+    padding: 25px 0;
+    margin-top: 20px;
+}
